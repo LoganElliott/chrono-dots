@@ -7,6 +7,11 @@ import FloatingActionButton from 'material-ui/FloatingActionButton';
 import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
 import ContentAdd from 'material-ui/svg-icons/content/add';
+import IconMenu from 'material-ui/IconMenu';
+import MenuItem from 'material-ui/MenuItem';
+import IconButton from 'material-ui/IconButton';
+import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
+import ColourDialog from '../colourDialog/colourDialog';
 
 const propTypes = {
     timeColours: PropTypes.shape({
@@ -20,7 +25,9 @@ class CardList extends Component {
         super(props);
         this.state = {
             cards: [],
-            newCardTitle: 'New Card Title',
+            newCardTitle: '',
+            isColourDialogOpen: false,
+            selectedCard: null,
         };
     }
 
@@ -84,13 +91,68 @@ class CardList extends Component {
         )
     }
 
-    renderCard(card){
+    async deleteCard(cardId){
+        try {
+            let myHeaders = new Headers();
+            myHeaders.append("Access-Control-Allow-Origin", "*");
+            myHeaders.append('Content-Type', 'application/json');
+
+            const myInit = {
+                method: 'DELETE',
+                headers: myHeaders,
+            };
+            const myRequest = new Request(`http://vdt107/ChronoDotsWeb/api/cards/${cardId}`, myInit);
+            await fetch(myRequest);
+            this.getCards();
+        } catch(e) {
+            console.log('Unable to get cards', e)
+        }
+    }
+
+    async updateCard(card, colour){
+        try {
+            let myHeaders = new Headers();
+            myHeaders.append("Access-Control-Allow-Origin", "*");
+            myHeaders.append('Content-Type', 'application/json');
+
+            const myInit = {
+                method: 'POST',
+                headers: myHeaders,
+                body: JSON.stringify({title: card.title, colour: colour})
+            };
+            const myRequest = new Request(`http://vdt107/ChronoDotsWeb/api/cards/${card.id}`, myInit);
+            await fetch(myRequest);
+            this.getCards();
+        } catch(e) {
+            console.log('Unable to get cards', e)
+        }
+    }
+
+    handleSetColour = (colour) => {
+        this.handleToggleIsColourDialogOpen();
+        this.updateCard(this.state.selectedCard, colour);
+    };
+
+    handleToggleIsColourDialogOpen = () => {
+        this.setState({isColourDialogOpen: !this.state.isColourDialogOpen});
+    };
+
+    renderCardMenu(card) {
+        return (
+            <IconMenu
+                iconButtonElement={<IconButton onTouchTap={() => this.setState({selectedCard: card})}><MoreVertIcon /></IconButton>}
+                anchorOrigin={{horizontal: 'left', vertical: 'top'}}
+                targetOrigin={{horizontal: 'left', vertical: 'top'}}
+                on
+            >
+                <MenuItem primaryText="Set Card Colour" onTouchTap={this.handleToggleIsColourDialogOpen}/>
+                <MenuItem primaryText="Delete Card" onTouchTap={() => this.deleteCard(card.id)}/>
+            </IconMenu>
+        );
+    }
+
+    renderCardHeader(card) {
         const styles = {
-            card: {
-                flex: '0 0 300px',
-                backgroundColor: card.colour,
-                margin: '10px'
-            },
             cardHeader: {
                 height: '48px',
                 display: 'flex',
@@ -103,11 +165,6 @@ class CardList extends Component {
                 flexGrow: 1,
                 fontSize: '20px'
             },
-            draggable: {
-                position: 'relative',
-                height: '252px',
-                width: '300px',
-            },
             buttons: {
                 display: 'flex',
                 alignItems: 'center',
@@ -115,18 +172,38 @@ class CardList extends Component {
         };
 
         return (
+            <div style={styles.cardHeader}>
+                <span style={styles.cardTitle}>{card.title}</span>
+                <span style={styles.buttons}>
+                    <FloatingActionButton style={{boxShadow: 'none', margin: '2px'}} onTouchTap={() => this.addDot(card.id, halfDayValue)} backgroundColor={this.props.timeColours.halfDay} mini={true}>
+                        ½
+                    </FloatingActionButton>
+                    <FloatingActionButton style={{boxShadow: 'none', margin: '2px'}} onTouchTap={() => this.addDot(card.id, fullDayValue)} backgroundColor={this.props.timeColours.fullDay} mini={true}>
+                        1
+                    </FloatingActionButton>
+                </span>
+                {this.renderCardMenu(card)}
+            </div>
+        );
+    }
+
+    renderCard(card){
+        const styles = {
+            card: {
+                flex: '0 0 300px',
+                backgroundColor: card.colour,
+                margin: '10px'
+            },
+            draggable: {
+                position: 'relative',
+                height: '252px',
+                width: '300px',
+            },
+        };
+
+        return (
             <Paper key={card.id} zDepth={2} style={styles.card}>
-                <div style={styles.cardHeader}>
-                    <span style={styles.cardTitle}>{card.title}</span>
-                    <span style={styles.buttons}>
-                        <FloatingActionButton style={{boxShadow: 'none', margin: '2px'}} onTouchTap={() => this.addDot(card.id, halfDayValue)} backgroundColor={this.props.timeColours.halfDay} mini={true}>
-                            ½
-                        </FloatingActionButton>
-                        <FloatingActionButton style={{boxShadow: 'none', margin: '2px'}} onTouchTap={() => this.addDot(card.id, fullDayValue)} backgroundColor={this.props.timeColours.fullDay} mini={true}>
-                            1
-                        </FloatingActionButton>
-                    </span>
-                </div>
+                {this.renderCardHeader(card)}
                 <div style={styles.draggable}>
                     {card.dots.map((dot) => this.renderDot(dot))}
                 </div>
@@ -150,6 +227,7 @@ class CardList extends Component {
             };
             const myRequest = new Request(`http://vdt107/ChronoDotsWeb/api/intouch/cards`, myInit);
             await fetch(myRequest);
+            this.setState({newCardTitle: 'New Card Title'});
             this.getCards();
         } catch(e) {
             console.log('Unable to get cards', e)
@@ -165,7 +243,7 @@ class CardList extends Component {
 
         return (
             <div style={styles.container}>
-                <TextField hintText={'New Card Title'} onChange={(event, newCardTitle) => this.setState({ newCardTitle})}/>
+                <TextField hintText={'New Card Title'} value={this.state.newCardTitle} onChange={(event, newCardTitle) => this.setState({ newCardTitle})}/>
                 <FloatingActionButton mini={true} onTouchTap={() => this.addCard(this.state.newCardTitle)}>
                     <ContentAdd />
                 </FloatingActionButton>
@@ -184,6 +262,7 @@ class CardList extends Component {
             <div style={styles.gridTile}>
                 {this.state.cards.map((card) => this.renderCard(card))}
                 {this.renderAddCard()}
+                <ColourDialog isOpen={this.state.isColourDialogOpen} onCancel={this.handleToggleIsColourDialogOpen} onSubmit={this.handleSetColour}/>
             </div>
         );
     }
