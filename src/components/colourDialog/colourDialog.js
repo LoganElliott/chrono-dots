@@ -14,7 +14,7 @@ class ColourDialog extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            colour: 'red',
+            colour: '#ff0000',
         };
     }
 

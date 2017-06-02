@@ -1,8 +1,17 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import AppBar from 'material-ui/AppBar';
 import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
 import ColourDialog from '../colourDialog/colourDialog';
+
+const propTypes = {
+    timeColours: PropTypes.shape({
+        fullDay: PropTypes.string.isRequired,
+        halfDay: PropTypes.string.isRequired,
+    }),
+    updateTimeColours: PropTypes.func.isRequired,
+};
 
 class header extends React.Component {
     constructor(props) {
@@ -10,10 +19,6 @@ class header extends React.Component {
         this.state = {
             isDrawerOpen: false,
             isColourDialogOpen: false,
-            timeColours: {
-                fullDay: '#e57373',
-                halfDay: '#00e676',
-            },
             colourPickerOpenId: ''
         };
     }
@@ -32,20 +37,20 @@ class header extends React.Component {
     handleClose = () => this.setState({isDrawerOpen: false});
 
     handleSetColour = (colour) => {
-        let timeColours = this.state.timeColours;
+        let timeColours = this.props.timeColours;
         timeColours[this.state.colourPickerOpenId] = colour;
 
         this.handleToggleIsColourDialogOpen();
-        this.setState({timeColours});
+        this.props.updateTimeColours(timeColours);
     };
 
     render() {
         const styles = {
             fullDayStyle: {
-                backgroundColor: this.state.timeColours.fullDay,
+                backgroundColor: this.props.timeColours.fullDay,
             },
             halfDayStyle: {
-                backgroundColor: this.state.timeColours.halfDay,
+                backgroundColor: this.props.timeColours.halfDay,
             }
         };
 
@@ -74,5 +79,7 @@ class header extends React.Component {
         );
     }
 }
+
+header.propTypes = propTypes;
 
 export default header;
