@@ -28,7 +28,6 @@ class App extends Component {
             const myRequest = new Request('http://vdt107/ChronoDotsWeb/api/intouch/settings', myInit);
             let response = await fetch(myRequest);
             data = await response.json();
-            console.log('data', data);
             this.setState({timeColours: {
                 halfDay: data.halfDayDotColour,
                 fullDay: data.fullDayDotColour,

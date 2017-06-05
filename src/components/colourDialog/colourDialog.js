@@ -18,8 +18,7 @@ class ColourDialog extends React.Component {
         };
     }
 
-    handleChangeComplete = (colour, event) => {
-        console.log(colour);
+    handleChangeComplete = (colour) => {
         this.setState({ colour: colour.hex });
     };
 
