@@ -65,7 +65,7 @@ class header extends React.Component {
                 />
                 <Drawer
                     docked={false}
-                    width={400}
+                    width={200}
                     open={this.state.isDrawerOpen}
                     onRequestChange={(isDrawerOpen) => this.setState({isDrawerOpen})}
                 >
