@@ -1,11 +1,8 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { GetCards } from '../cardList/actions';
 import {
   Table,
   TableBody,
-  TableFooter,
-  TableHeader,
   TableHeaderColumn,
   TableRow,
   TableRowColumn,

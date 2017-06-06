@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Avatar from 'material-ui/Avatar';
 import Draggable from 'react-draggable';
 import { halfDayValue, fullDayValue } from '../../constants';
-import { UpdateDot, DeleteDot } from './actions';
+import { DeleteDot } from './actions';
 
 const propTypes = {
     dot: PropTypes.shape({
