@@ -95,19 +95,21 @@ const Card = (props) => {
     const { card, timeColours, openColourPickerDialog, onUpdate } = props;
     const numberOfDots = card.dots.length;
     const maxNumberOfDotsPerSize = 35;
-    const baseHeight = 265;
-    const height = Math.ceil(numberOfDots/maxNumberOfDotsPerSize)*baseHeight;
+    const baseCardHeight = 325;
+    const dotsRatio = Math.ceil(numberOfDots/maxNumberOfDotsPerSize);
+    const cardHeight = dotsRatio*baseCardHeight || baseCardHeight;
+    const draggableHeight = cardHeight - 60;
 
     const styles = {
         card: {
             flex: '0 0 325px',
             backgroundColor: card.colour,
             margin: '10px',
-            height: `${height}px`,
+            height: `${cardHeight}px`,
         },
         draggable: {
             position: 'relative',
-            height: `${height}px`,
+            height: `${draggableHeight}px`,
             width: '325px',
         },
     };
