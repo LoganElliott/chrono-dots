@@ -69,10 +69,16 @@ class header extends React.Component {
                     open={this.state.isDrawerOpen}
                     onRequestChange={(isDrawerOpen) => this.setState({isDrawerOpen})}
                 >
-                    <MenuItem onTouchTap={() => this.props.onSelectCardsView() }>
+                    <MenuItem onTouchTap={() => {
+                        this.props.onSelectCardsView();
+                        this.handleToggle();
+                    }}>
                         Cards View
                     </MenuItem>
-                    <MenuItem onTouchTap={() => this.props.onSelectStatsView() }>
+                    <MenuItem onTouchTap={() => {
+                        this.props.onSelectStatsView();
+                        this.handleToggle();
+                    }}>
                         Stats View
                     </MenuItem>
                     <br />
