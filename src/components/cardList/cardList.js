@@ -6,6 +6,7 @@ import ContentAdd from 'material-ui/svg-icons/content/add';
 import ColourDialog from '../colourDialog/colourDialog';
 import Card from './card';
 import { GetCards, AddCard, UpdateCard } from './actions';
+import './styles.css';
 
 const propTypes = {
     timeColours: PropTypes.shape({
@@ -35,6 +36,7 @@ class CardList extends Component {
 
     componentWillMount() {
         this.getCards();
+        // setInterval(() => this.getCards(), 500);
     }
 
     handleToggleIsColourDialogOpen() {
@@ -57,6 +59,7 @@ class CardList extends Component {
         const styles = {
             container: {
                 margin: '10px',
+                width: '318px',
             }
         };
 
@@ -79,7 +82,7 @@ class CardList extends Component {
         };
 
         return (
-            <div style={styles.gridTile}>
+            <div style={styles.gridTile} className="card">
                 {this.state.cards.map((card) => (
                         <Card
                             key={card.id}
@@ -89,7 +92,7 @@ class CardList extends Component {
                                 this.setState({selectedCard: card});
                                 this.handleToggleIsColourDialogOpen();
                             })}
-                            onDelete={this.getCards}
+                            onUpdate={this.getCards}
                         />
                     )
                 )}

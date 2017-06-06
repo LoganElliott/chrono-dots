@@ -35,6 +35,23 @@ export const AddDot = async (cardId, timeAmount) => {
     }
 };
 
+export const DeleteDots = async (cardId) => {
+    try {
+        let myHeaders = new Headers();
+        myHeaders.append("Access-Control-Allow-Origin", "*");
+        myHeaders.append('Content-Type', 'application/json');
+
+        const myInit = {
+            method: 'DELETE',
+            headers: myHeaders,
+        };
+        const myRequest = new Request(`http://vdt107/ChronoDotsWeb/api/cards/${cardId}/dots`, myInit);
+        await fetch(myRequest);
+    } catch(e) {
+        console.log('Unable to delete dots', e)
+    }
+};
+
 export const DeleteCard = async (cardId) => {
     try {
         let myHeaders = new Headers();
@@ -86,7 +103,6 @@ export const AddCard = async (title) => {
         };
         const myRequest = new Request(`http://vdt107/ChronoDotsWeb/api/intouch/cards`, myInit);
         await fetch(myRequest);
-        return;
     } catch(e) {
         console.log('Unable to add card', e)
     }

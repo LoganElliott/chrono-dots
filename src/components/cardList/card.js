@@ -8,7 +8,7 @@ import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import { halfDayValue, fullDayValue } from '../../constants';
 import Dot from './dot';
-import { AddDot, DeleteCard } from './actions';
+import { AddDot, DeleteCard, DeleteDots } from './actions';
 
 const propTypes = {
     card: PropTypes.shape({
@@ -21,26 +21,37 @@ const propTypes = {
         fullDay: PropTypes.string.isRequired,
     }).isRequired,
     openColourPickerDialog: PropTypes.func.isRequired,
-    onDelete: PropTypes.func.isRequired,
+    onUpdate: PropTypes.func.isRequired,
 };
 
-const onDeleteCard = async (cardId, onDelete) => {
+const onDeleteCard = async (cardId, onUpdate) => {
     await DeleteCard(cardId);
-    onDelete();
+    onUpdate();
 };
 
-const renderCardMenu = (card, openColourPickerDialog, onDelete) => (
+const onDeleteDots = async (cardId, onUpdate) => {
+    await DeleteDots(cardId);
+    onUpdate();
+};
+
+const onAddDot = async (cardId, time, onUpdate) => {
+    await AddDot(cardId, time);
+    onUpdate();
+};
+
+const renderCardMenu = (card, openColourPickerDialog, onUpdate) => (
     <IconMenu
         iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
         anchorOrigin={{horizontal: 'left', vertical: 'top'}}
         targetOrigin={{horizontal: 'left', vertical: 'top'}}
     >
         <MenuItem primaryText="Set Card Colour" onTouchTap={() => openColourPickerDialog(card)}/>
-        <MenuItem primaryText="Delete Card" onTouchTap={() => onDeleteCard(card.id, onDelete)}/>
+        <MenuItem primaryText="Clear Dots" onTouchTap={() => onDeleteDots(card.id, onUpdate)}/>
+        <MenuItem primaryText="Delete Card" onTouchTap={() => onDeleteCard(card.id, onUpdate)}/>
     </IconMenu>
 );
 
-const renderCardHeader = (card, timeColours, openColourPickerDialog, onDelete) => {
+const renderCardHeader = (card, timeColours, openColourPickerDialog, onUpdate) => {
     const styles = {
         cardHeader: {
             height: '48px',
@@ -49,10 +60,14 @@ const renderCardHeader = (card, timeColours, openColourPickerDialog, onDelete) =
             margin: '6px',
         },
         cardTitle: {
-            display: 'flex',
             alignItems: 'center',
             flexGrow: 1,
-            fontSize: '20px'
+            fontSize: '20px',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+            width: '170px',
+            lineHeight: '48px',
         },
         buttons: {
             display: 'flex',
@@ -64,36 +79,42 @@ const renderCardHeader = (card, timeColours, openColourPickerDialog, onDelete) =
         <div style={styles.cardHeader}>
             <span style={styles.cardTitle}>{card.title}</span>
             <span style={styles.buttons}>
-                    <FloatingActionButton style={{boxShadow: 'none', margin: '2px'}} onTouchTap={() => AddDot(card.id, halfDayValue)} backgroundColor={timeColours.halfDay} mini={true}>
+                    <FloatingActionButton style={{boxShadow: 'none', margin: '2px'}} onTouchTap={() => onAddDot(card.id, halfDayValue, onUpdate)} backgroundColor={timeColours.halfDay} mini={true}>
                         ½
                     </FloatingActionButton>
-                    <FloatingActionButton style={{boxShadow: 'none', margin: '2px'}} onTouchTap={() => AddDot(card.id, fullDayValue)} backgroundColor={timeColours.fullDay} mini={true}>
+                    <FloatingActionButton style={{boxShadow: 'none', margin: '2px'}} onTouchTap={() => onAddDot(card.id, fullDayValue, onUpdate)} backgroundColor={timeColours.fullDay} mini={true}>
                         1
                     </FloatingActionButton>
                 </span>
-            {renderCardMenu(card, openColourPickerDialog, onDelete)}
+            {renderCardMenu(card, openColourPickerDialog, onUpdate)}
         </div>
     );
 };
 
 const Card = (props) => {
-    const { card, timeColours, openColourPickerDialog, onDelete } = props;
+    const { card, timeColours, openColourPickerDialog, onUpdate } = props;
+    const numberOfDots = card.dots.length;
+    const maxNumberOfDotsPerSize = 35;
+    const baseHeight = 265;
+    const height = Math.ceil(numberOfDots/maxNumberOfDotsPerSize)*baseHeight;
+
     const styles = {
         card: {
-            flex: '0 0 300px',
+            flex: '0 0 325px',
             backgroundColor: card.colour,
-            margin: '10px'
+            margin: '10px',
+            height: `${height}px`,
         },
         draggable: {
             position: 'relative',
-            height: '252px',
-            width: '300px',
+            height: `${height}px`,
+            width: '325px',
         },
     };
 
     return (
         <Paper key={card.id} zDepth={2} style={styles.card}>
-            {renderCardHeader(card, timeColours, openColourPickerDialog, onDelete)}
+            {renderCardHeader(card, timeColours, openColourPickerDialog, onUpdate)}
             <div style={styles.draggable}>
                 {card.dots.map((dot) => <Dot key={dot.id} dot={dot} timeColours={timeColours}/>)}
             </div>
