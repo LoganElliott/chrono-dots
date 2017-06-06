@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import Header from './components/header/header';
 import CardList from './components/cardList/cardList'
+import { baseApiUri } from './constants';
 
 class App extends Component {
     constructor(props){
@@ -25,7 +26,7 @@ class App extends Component {
                 method: 'GET',
                 headers: myHeaders
             };
-            const myRequest = new Request('http://vdt107/ChronoDotsWeb/api/intouch/settings', myInit);
+            const myRequest = new Request(`${baseApiUri}/intouch/settings`, myInit);
             let response = await fetch(myRequest);
             data = await response.json();
             this.setState({timeColours: {
