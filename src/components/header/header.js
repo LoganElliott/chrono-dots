@@ -11,6 +11,8 @@ const propTypes = {
         halfDay: PropTypes.string.isRequired,
     }),
     updateTimeColours: PropTypes.func.isRequired,
+    onSelectStatsView: PropTypes.func.isRequired,
+    onSelectCardsView: PropTypes.func.isRequired,
 };
 
 class header extends React.Component {
@@ -63,10 +65,17 @@ class header extends React.Component {
                 />
                 <Drawer
                     docked={false}
-                    width={200}
+                    width={400}
                     open={this.state.isDrawerOpen}
                     onRequestChange={(isDrawerOpen) => this.setState({isDrawerOpen})}
                 >
+                    <MenuItem onTouchTap={() => this.props.onSelectCardsView() }>
+                        Cards View
+                    </MenuItem>
+                    <MenuItem onTouchTap={() => this.props.onSelectStatsView() }>
+                        Stats View
+                    </MenuItem>
+                    <br />
                     <MenuItem onTouchTap={() => {this.handleClose(); this.handleToggleIsColourDialogOpen('fullDay')}} style={styles.fullDayStyle}>
                         Full Day Colour
                     </MenuItem>
