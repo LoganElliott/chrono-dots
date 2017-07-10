@@ -89,7 +89,10 @@ class CardList extends Component {
                             card={card}
                             timeColours={this.props.timeColours}
                             openColourPickerDialog={(card => {
-                                this.setState({selectedCard: card});
+                                this.setState({
+                                    selectedCard: card,
+                                    colourPickerTitle: `Select ${card.title} card colour`,
+                                });
                                 this.handleToggleIsColourDialogOpen();
                             })}
                             onUpdate={this.getCards}
@@ -97,7 +100,7 @@ class CardList extends Component {
                     )
                 )}
                 {this.renderAddCard()}
-                <ColourDialog isOpen={this.state.isColourDialogOpen} onCancel={this.handleToggleIsColourDialogOpen} onSubmit={this.handleSetColour}/>
+                <ColourDialog title={this.state.colourPickerTitle} isOpen={this.state.isColourDialogOpen} onCancel={this.handleToggleIsColourDialogOpen} onSubmit={this.handleSetColour} />
             </div>
         );
     }

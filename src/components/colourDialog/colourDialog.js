@@ -8,6 +8,7 @@ const propTypes = {
     isOpen: PropTypes.bool.isRequired,
     onSubmit: PropTypes.func.isRequired,
     onCancel: PropTypes.func.isRequired,
+    title: PropTypes.string.isRequired,
 };
 
 class ColourDialog extends React.Component {
@@ -40,7 +41,7 @@ class ColourDialog extends React.Component {
         return (
             <div>
                 <Dialog
-                    title="Dialog With Actions"
+                    title={this.props.title}
                     actions={actions}
                     modal={false}
                     open={this.props.isOpen}

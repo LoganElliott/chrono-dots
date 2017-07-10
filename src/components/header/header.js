@@ -29,7 +29,7 @@ class header extends React.Component {
 
     handleToggleIsColourDialogOpen = (id) => {
         if(!this.state.isColourDialogOpen) {
-            this.setState({colourPickerOpenId: id});
+            this.setState({colourPickerOpenId: id, colourPickerTitle: `Select ${id} colour`});
         } else {
             this.setState({colourPickerOpenId: ''});
         }
@@ -89,7 +89,7 @@ class header extends React.Component {
                         Half Day Colour
                     </MenuItem>
                 </Drawer>
-                <ColourDialog isOpen={this.state.isColourDialogOpen} onCancel={this.handleToggleIsColourDialogOpen} onSubmit={this.handleSetColour}/>
+                <ColourDialog title={this.state.colourPickerTitle} isOpen={this.state.isColourDialogOpen} onCancel={this.handleToggleIsColourDialogOpen} onSubmit={this.handleSetColour}/>
             </div>
         );
     }
