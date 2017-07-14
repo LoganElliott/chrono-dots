@@ -79,7 +79,7 @@ export const DeleteCard = async (cardId) => {
     }
 };
 
-export const UpdateCard = async (card, colour) => {
+export const UpdateCard = async (card) => {
     try {
         let myHeaders = new Headers();
         myHeaders.append("Access-Control-Allow-Origin", "*");
@@ -88,7 +88,7 @@ export const UpdateCard = async (card, colour) => {
         const myInit = {
             method: 'POST',
             headers: myHeaders,
-            body: JSON.stringify({title: card.title, colour: colour})
+            body: JSON.stringify({title: card.title, colour: card.colour})
         };
         const myRequest = new Request(`${baseApiUri}/cards/${card.id}`, myInit);
         await fetch(myRequest);
