@@ -1,0 +1,16 @@
+language: node_js
+node_js:
+  - 8
+cache:
+  directories:
+  - global-cli/node_modules
+  - node_modules
+script:
+  - npm run production-build
+deploy:
+  provider: releases
+  api_key: $GITHUB_TOKEN
+  file: build.zip
+  skip_cleanup: true
+  on:
+    tags: true
