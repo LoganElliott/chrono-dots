@@ -23,6 +23,7 @@ const propTypes = {
     }).isRequired,
     openColourPickerDialog: PropTypes.func.isRequired,
     onUpdate: PropTypes.func.isRequired,
+    openRenameDialog: PropTypes.func.isRequired,
 };
 
 const onDeleteCard = async (cardId, onUpdate) => {
@@ -40,7 +41,7 @@ const onAddDot = async (cardId, time, onUpdate) => {
     onUpdate();
 };
 
-const renderCardMenu = (card, openColourPickerDialog, onUpdate) => {
+const renderCardMenu = (card, openColourPickerDialog, openRenameDialog, onUpdate) => {
     const textColour = (parseInt(card.colour.replace('#', '0x'), 16) > 0xffffff/2) ? 'black':'white';
 
     return (
@@ -49,6 +50,7 @@ const renderCardMenu = (card, openColourPickerDialog, onUpdate) => {
             anchorOrigin={{horizontal: 'left', vertical: 'top'}}
             targetOrigin={{horizontal: 'left', vertical: 'top'}}
         >
+            <MenuItem primaryText="Rename Card" onTouchTap={() => openRenameDialog(card, onUpdate)}/>
             <MenuItem primaryText="Set Card Colour" onTouchTap={() => openColourPickerDialog(card)}/>
             <MenuItem primaryText="Clear Dots" onTouchTap={() => onDeleteDots(card.id, onUpdate)}/>
             <MenuItem primaryText="Delete Card" onTouchTap={() => onDeleteCard(card.id, onUpdate)}/>
@@ -56,7 +58,7 @@ const renderCardMenu = (card, openColourPickerDialog, onUpdate) => {
     );
 };
 
-const renderCardHeader = (card, timeColours, openColourPickerDialog, onUpdate) => {
+const renderCardHeader = (card, timeColours, openColourPickerDialog, openRenameDialog, onUpdate) => {
     const textColour = (parseInt(card.colour.replace('#', '0x'), 16) > 0xffffff/2) ? 'black':'white';
     const halfDayTextColour = (parseInt(timeColours.halfDay.replace('#', '0x'), 16) > 0xffffff/2) ? 'black':'white';
     const fullDayTextColour = (parseInt(timeColours.fullDay.replace('#', '0x'), 16) > 0xffffff/2) ? 'black':'white';
@@ -105,13 +107,13 @@ const renderCardHeader = (card, timeColours, openColourPickerDialog, onUpdate) =
                         </span>
                     </FloatingActionButton>
                 </span>
-            {renderCardMenu(card, openColourPickerDialog, onUpdate)}
+            {renderCardMenu(card, openColourPickerDialog, openRenameDialog, onUpdate)}
         </div>
     );
 };
 
 const Card = (props) => {
-    const { card, timeColours, openColourPickerDialog, onUpdate } = props;
+    const { card, timeColours, openColourPickerDialog, openRenameDialog, onUpdate } = props;
     const numberOfDots = card.dots.length;
     const maxNumberOfDotsPerSize = 35;
     const baseCardHeight = 324;
@@ -144,7 +146,7 @@ const Card = (props) => {
 
     return (
         <Paper key={card.id} zDepth={2} style={styles.card}>
-            {renderCardHeader(card, timeColours, openColourPickerDialog, onUpdate)}
+            {renderCardHeader(card, timeColours, openColourPickerDialog, openRenameDialog, onUpdate)}
             <div style={styles.draggable}>
                 <DeleteIcon color={deleteColour} style={styles.delete}/>
                 {card.dots.map((dot, index) => (

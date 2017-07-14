@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import TextField from 'material-ui/TextField';
 import ContentAdd from 'material-ui/svg-icons/content/add';
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
 import ColourDialog from '../colourDialog/colourDialog';
 import Card from './card';
 import { GetCards, AddCard, UpdateCard } from './actions';
@@ -23,8 +25,12 @@ class CardList extends Component {
             newCardTitle: '',
             isColourDialogOpen: false,
             selectedCard: null,
+            isRenameCardDialogOpen: false,
+            renameCardTitle: '',
         };
+        this.handleToggleIsRenameDialogOpen = this.handleToggleIsRenameDialogOpen.bind(this);
         this.handleToggleIsColourDialogOpen = this.handleToggleIsColourDialogOpen.bind(this);
+        this.handleRenameCard = this.handleRenameCard.bind(this);
         this.handleSetColour = this.handleSetColour.bind(this);
         this.getCards = this.getCards.bind(this);
     }
@@ -39,13 +45,23 @@ class CardList extends Component {
         // setInterval(() => this.getCards(), 500);
     }
 
+    handleToggleIsRenameDialogOpen() {
+        this.setState({isRenameCardDialogOpen: !this.state.isRenameCardDialogOpen});
+    };
+
     handleToggleIsColourDialogOpen() {
         this.setState({isColourDialogOpen: !this.state.isColourDialogOpen});
     };
 
+    async handleRenameCard(title) {
+        this.handleToggleIsRenameDialogOpen();
+        await UpdateCard({...this.state.selectedCard, title});
+        this.getCards();
+    };
+
     async handleSetColour(colour) {
         this.handleToggleIsColourDialogOpen();
-        await UpdateCard(this.state.selectedCard, colour);
+        await UpdateCard({...this.state.selectedCard, colour});
         this.getCards();
     };
 
@@ -73,7 +89,42 @@ class CardList extends Component {
         )
     }
 
+    renderRenameDialog(){
+        if(!this.state.isRenameCardDialogOpen || !this.state.selectedCard){
+            return null;
+        }
+        const actions = [
+            <FlatButton
+                label="Cancel"
+                primary={true}
+                onTouchTap={this.handleToggleIsRenameDialogOpen}
+            />,
+            <FlatButton
+                label="Submit"
+                primary={true}
+                keyboardFocused={true}
+                onTouchTap={() => this.handleRenameCard(this.state.renameCardTitle)}
+            />,
+        ];
+
+        return (
+            <Dialog title={'Rename ' + this.state.selectedCard.title + ' card'}
+                actions={actions}
+                modal={false}
+                open={this.state.isRenameCardDialogOpen}
+                onRequestClose={this.handleToggleIsRenameDialogOpen}
+                contentStyle={{width: '325px'}}
+            >
+                <TextField id="RenameCardDialog" defaultValue={this.state.selectedCard.title} onChange={(event, renameCardTitle) => this.setState({ renameCardTitle})}/>
+            </Dialog>
+        );
+    }
+
     render() {
+        if(!this.state.cards || this.state.cards.length === 0){
+            return null;
+        }
+
         const styles = {
             gridTile: {
                 display: 'flex',
@@ -91,15 +142,22 @@ class CardList extends Component {
                             openColourPickerDialog={(card => {
                                 this.setState({
                                     selectedCard: card,
-                                    colourPickerTitle: `Select ${card.title} card colour`,
+                                    colourPickerTitle: 'Select ' + card.title + 'card colour',
                                 });
                                 this.handleToggleIsColourDialogOpen();
+                            })}
+                            openRenameDialog={(card => {
+                                this.setState({
+                                    selectedCard: card,
+                                });
+                                this.handleToggleIsRenameDialogOpen();
                             })}
                             onUpdate={this.getCards}
                         />
                     )
                 )}
                 {this.renderAddCard()}
+                {this.renderRenameDialog()}
                 <ColourDialog title={this.state.colourPickerTitle} isOpen={this.state.isColourDialogOpen} onCancel={this.handleToggleIsColourDialogOpen} onSubmit={this.handleSetColour} />
             </div>
         );

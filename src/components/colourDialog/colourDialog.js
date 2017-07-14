@@ -8,7 +8,11 @@ const propTypes = {
     isOpen: PropTypes.bool.isRequired,
     onSubmit: PropTypes.func.isRequired,
     onCancel: PropTypes.func.isRequired,
-    title: PropTypes.string.isRequired,
+    title: PropTypes.string,
+};
+
+const defaultProps = {
+    title: 'Colour Dialog'
 };
 
 class ColourDialog extends React.Component {
@@ -57,5 +61,7 @@ class ColourDialog extends React.Component {
 }
 
 ColourDialog.propTypes = propTypes;
+
+ColourDialog.defaultProps = defaultProps;
 
 export default ColourDialog;
