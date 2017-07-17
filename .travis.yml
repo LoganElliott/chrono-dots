@@ -6,6 +6,7 @@ cache:
   - global-cli/node_modules
   - node_modules
 script:
+  - npm run production-test
   - npm run production-build
 deploy:
   provider: releases
