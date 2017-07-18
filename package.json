@@ -24,7 +24,7 @@
     "start-js": "react-scripts start",
     "start": "npm-run-all -p watch-css start-js",
     "build": "CI=true npm run build-css && react-scripts build",
-    "production-build": "PUBLIC_URL='/ChronoDotsWeb' npm-run-all -s build zip-build",
+    "production-build": "PUBLIC_URL='/ChronoDotsWeb' npm run build",
     "zip-build": "./zipBuildFolder.sh",
     "test": "react-scripts test --env=jsdom",
     "production-test": "CI=true npm test",

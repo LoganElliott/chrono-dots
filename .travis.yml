@@ -6,8 +6,9 @@ cache:
   - global-cli/node_modules
   - node_modules
 script:
-  - npm run test
   - npm run production-build
+  - npm run test
+  - npm run zip-build
 deploy:
   provider: releases
   api_key: $GITHUB_TOKEN
