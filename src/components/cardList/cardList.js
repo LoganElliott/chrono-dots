@@ -67,7 +67,7 @@ class CardList extends Component {
 
     async addCard (cardTitle) {
         await AddCard(cardTitle);
-        this.setState({newCardTitle: 'New Card Title'});
+        this.setState({newCardTitle: ''});
         this.getCards();
     }
 
