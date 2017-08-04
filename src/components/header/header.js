@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom'
 import AppBar from 'material-ui/AppBar';
 import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
@@ -11,8 +12,6 @@ const propTypes = {
         halfDay: PropTypes.string.isRequired,
     }),
     updateTimeColours: PropTypes.func.isRequired,
-    onSelectStatsView: PropTypes.func.isRequired,
-    onSelectCardsView: PropTypes.func.isRequired,
 };
 
 class header extends React.Component {
@@ -70,16 +69,19 @@ class header extends React.Component {
                     onRequestChange={(isDrawerOpen) => this.setState({isDrawerOpen})}
                 >
                     <MenuItem onTouchTap={() => {
-                        this.props.onSelectCardsView();
                         this.handleToggle();
                     }}>
-                        Cards View
+                        <Link to='/' style={{ textDecoration: 'none', display: 'flex', color: 'black' }}>Home</Link>
                     </MenuItem>
                     <MenuItem onTouchTap={() => {
-                        this.props.onSelectStatsView();
                         this.handleToggle();
                     }}>
-                        Stats View
+                        <Link to='/time' style={{ textDecoration: 'none', display: 'flex', color: 'black' }}>Time</Link>
+                    </MenuItem>
+                    <MenuItem onTouchTap={() => {
+                        this.handleToggle();
+                    }}>
+                        <Link to='/statistics' style={{ textDecoration: 'none', display: 'flex', color: 'black' }}>Statistics</Link>
                     </MenuItem>
                     <br />
                     <MenuItem onTouchTap={() => {this.handleClose(); this.handleToggleIsColourDialogOpen('fullDay')}} style={styles.fullDayStyle}>

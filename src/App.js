@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
+import {
+    Switch,
+    Route,
+} from 'react-router-dom'
 import './App.css';
 import Header from './components/header/header';
 import CardList from './components/cardList/cardList'
 import { baseApiUri } from './constants';
 import StatsTable from './components/stats/StatsTable';
-
-const ROUTE_CARDS = 'cards';
-const ROUTE_STATS = 'stats';
+import Home from './components/home/home';
 
 class App extends Component {
     constructor(props){
@@ -17,19 +19,8 @@ class App extends Component {
                 halfDay: '#D9E3F0',
             }, 
             description: 'Team Awesome',
-            route: ROUTE_CARDS,
         };
         this.updateTimeColours = this.updateTimeColours.bind(this);
-        this.onSelectCardsView = this.onSelectCardsView.bind(this);
-        this.onSelectStatsView = this.onSelectStatsView.bind(this);
-    }
-
-    onSelectStatsView() {
-        this.setState({ route: ROUTE_STATS });
-    }
-
-    onSelectCardsView() {
-        this.setState({ route: ROUTE_CARDS });
     }
 
     async getSettings(){
@@ -55,8 +46,6 @@ class App extends Component {
         }
         return data;
     }
-
-
 
     async updateSettings(timeColours, description){
         let data;
@@ -94,19 +83,17 @@ class App extends Component {
     }
 
     render() {
-        const view = this.state.route === ROUTE_CARDS
-            ? <CardList timeColours={this.state.timeColours}/>
-            : <div><StatsTable /></div>;
-
         return (
             <div>
-                <Header 
-                    timeColours={this.state.timeColours} 
+                <Header
+                    timeColours={this.state.timeColours}
                     updateTimeColours={this.updateTimeColours}
-                    onSelectCardsView={this.onSelectCardsView}
-                    onSelectStatsView={this.onSelectStatsView}
                 />
-                {view}
+                <Switch>
+                    <Route exact path='/' render={() => <Home/>}/>
+                    <Route exact path='/time' render={() => <CardList timeColours={this.state.timeColours}/>}/>
+                    <Route exact path='/statistics' render={() => <div><StatsTable /></div>}/>
+                </Switch>
             </div>
         );
     }
