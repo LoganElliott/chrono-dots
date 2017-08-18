@@ -5,6 +5,7 @@ import AppBar from 'material-ui/AppBar';
 import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
 import ColourDialog from '../colourDialog/colourDialog';
+import { teamIdRegex } from '../../constants';
 
 const propTypes = {
     timeColours: PropTypes.shape({
@@ -17,10 +18,18 @@ const propTypes = {
 class header extends React.Component {
     constructor(props) {
         super(props);
+
+        const match = window.location.href.match(teamIdRegex);
+        let teamId;
+        if (match) {
+            teamId = match[1];
+        }
+
         this.state = {
             isDrawerOpen: false,
             isColourDialogOpen: false,
-            colourPickerOpenId: ''
+            colourPickerOpenId: '',
+            teamId,
         };
     }
 
@@ -45,16 +54,59 @@ class header extends React.Component {
         this.props.updateTimeColours(timeColours);
     };
 
-    render() {
-        const styles = {
-            fullDayStyle: {
-                backgroundColor: this.props.timeColours.fullDay,
-            },
-            halfDayStyle: {
-                backgroundColor: this.props.timeColours.halfDay,
-            }
-        };
+    renderRouteLinks () {
+        if(this.state.teamId) {
+            return (
+                <div>
+                    <MenuItem onClick={() => {
+                        this.handleToggle();
+                    }}>
+                        <Link to={`/${this.state.teamId}/home`}
+                              style={{textDecoration: 'none', display: 'flex', color: 'black'}}>Home</Link>
+                    </MenuItem>
+                    <MenuItem onClick={() => {
+                        this.handleToggle();
+                    }}>
+                        <Link to={`/${this.state.teamId}/time`}
+                              style={{textDecoration: 'none', display: 'flex', color: 'black'}}>Time</Link>
+                    </MenuItem>
+                    <MenuItem onClick={() => {
+                        this.handleToggle();
+                    }}>
+                        <Link to={`/${this.state.teamId}/statistics`}
+                              style={{textDecoration: 'none', display: 'flex', color: 'black'}}>Statistics</Link>
+                    </MenuItem>
+                    <br />
+                </div>
+            )
+        }
+    }
 
+    renderTimeDotColours() {
+        if(this.state.teamId) {
+            const styles = {
+                fullDayStyle: {
+                    backgroundColor: this.props.timeColours.fullDay,
+                },
+                halfDayStyle: {
+                    backgroundColor: this.props.timeColours.halfDay,
+                }
+            };
+
+            return (
+                <div>
+                    <MenuItem onClick={() => {this.handleClose(); this.handleToggleIsColourDialogOpen('fullDay')}} style={styles.fullDayStyle}>
+                        Full Day Colour
+                    </MenuItem>
+                    <MenuItem onClick={() => {this.handleClose(); this.handleToggleIsColourDialogOpen('halfDay')}} style={styles.halfDayStyle}>
+                        Half Day Colour
+                    </MenuItem>
+                </div>
+            )
+        }
+    }
+
+    render() {
         return (
             <div>
                 <AppBar
@@ -68,28 +120,8 @@ class header extends React.Component {
                     open={this.state.isDrawerOpen}
                     onRequestChange={(isDrawerOpen) => this.setState({isDrawerOpen})}
                 >
-                    <MenuItem onClick={() => {
-                        this.handleToggle();
-                    }}>
-                        <Link to='/' style={{ textDecoration: 'none', display: 'flex', color: 'black' }}>Home</Link>
-                    </MenuItem>
-                    <MenuItem onClick={() => {
-                        this.handleToggle();
-                    }}>
-                        <Link to='/time' style={{ textDecoration: 'none', display: 'flex', color: 'black' }}>Time</Link>
-                    </MenuItem>
-                    <MenuItem onClick={() => {
-                        this.handleToggle();
-                    }}>
-                        <Link to='/statistics' style={{ textDecoration: 'none', display: 'flex', color: 'black' }}>Statistics</Link>
-                    </MenuItem>
-                    <br />
-                    <MenuItem onClick={() => {this.handleClose(); this.handleToggleIsColourDialogOpen('fullDay')}} style={styles.fullDayStyle}>
-                        Full Day Colour
-                    </MenuItem>
-                    <MenuItem onClick={() => {this.handleClose(); this.handleToggleIsColourDialogOpen('halfDay')}} style={styles.halfDayStyle}>
-                        Half Day Colour
-                    </MenuItem>
+                    {this.renderRouteLinks()}
+                    {this.renderTimeDotColours()}
                 </Drawer>
                 <ColourDialog title={this.state.colourPickerTitle} isOpen={this.state.isColourDialogOpen} onCancel={this.handleToggleIsColourDialogOpen} onSubmit={this.handleSetColour}/>
             </div>

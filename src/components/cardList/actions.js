@@ -1,7 +1,7 @@
 import { baseApiUri } from '../../constants.js';
 import $ from "jquery";
 
-export const GetCards = async () => {
+export const GetCards = async (teamId) => {
     let data;
     try {
         let myHeaders = new Headers();
@@ -10,7 +10,7 @@ export const GetCards = async () => {
             method: 'GET',
             headers: myHeaders
         };
-        const myRequest = new Request(`${baseApiUri}/intouch/dashboard`, myInit);
+        const myRequest = new Request(`${baseApiUri}/${teamId}/dashboard`, myInit);
         let response = await fetch(myRequest);
         data = await response.json();
         return data;
@@ -97,7 +97,7 @@ export const UpdateCard = async (card) => {
     }
 };
 
-export const AddCard = async (title) => {
+export const AddCard = async (title, teamId) => {
     try {
         let myHeaders = new Headers();
         myHeaders.append("Access-Control-Allow-Origin", "*");
@@ -111,7 +111,7 @@ export const AddCard = async (title) => {
                 colour: '#' + Math.random().toString(16).slice(2, 8)
             })
         };
-        const myRequest = new Request(`${baseApiUri}/intouch/cards`, myInit);
+        const myRequest = new Request(`${baseApiUri}/${teamId}/cards`, myInit);
         await fetch(myRequest);
     } catch(e) {
         console.log('Unable to add card', e)
