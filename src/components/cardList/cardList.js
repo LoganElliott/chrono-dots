@@ -36,7 +36,7 @@ class CardList extends Component {
     }
 
     async getCards(){
-        const cards = await GetCards();
+        const cards = await GetCards(this.props.match.params.teamId);
         this.setState({cards});
     }
 
@@ -67,7 +67,7 @@ class CardList extends Component {
 
     async addCard (cardTitle) {
         await AddCard(cardTitle);
-        this.setState({newCardTitle: 'New Card Title'});
+        this.setState({newCardTitle: ''});
         this.getCards();
     }
 
@@ -82,7 +82,7 @@ class CardList extends Component {
         return (
             <div style={styles.container}>
                 <TextField hintText={'New Card Title'} value={this.state.newCardTitle} onChange={(event, newCardTitle) => this.setState({ newCardTitle})}/>
-                <FloatingActionButton mini={true} onTouchTap={() => this.addCard(this.state.newCardTitle)}>
+                <FloatingActionButton mini={true} onClick={() => this.addCard(this.state.newCardTitle)}>
                     <ContentAdd />
                 </FloatingActionButton>
             </div>
@@ -97,13 +97,13 @@ class CardList extends Component {
             <FlatButton
                 label="Cancel"
                 primary={true}
-                onTouchTap={this.handleToggleIsRenameDialogOpen}
+                onClick={this.handleToggleIsRenameDialogOpen}
             />,
             <FlatButton
                 label="Submit"
                 primary={true}
                 keyboardFocused={true}
-                onTouchTap={() => this.handleRenameCard(this.state.renameCardTitle)}
+                onClick={() => this.handleRenameCard(this.state.renameCardTitle)}
             />,
         ];
 

@@ -39,7 +39,7 @@ class StatsTable extends React.Component {
     }
 
     async getCards(){
-        const cards = await GetCards();
+        const cards = await GetCards(this.props.match.params.teamId);
         this.setState({cards});
     }
 
@@ -95,7 +95,7 @@ class StatsTable extends React.Component {
                 }
 
                 if(workLogged !== undefined){
-                    featureWorkTotal += 1;
+                    featureWorkTotal += workLogged;
                     userTotals[username] += workLogged;
                 }
                 columns.push(<TableRowColumn style={styles.cell} key={username}>{workLogged}</TableRowColumn>);

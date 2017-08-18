@@ -1,31 +1,34 @@
 {
   "name": "chrono-dots",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "private": true,
   "dependencies": {
-    "jquery": "^3.2.1",
-    "material-ui": "0.18.1",
+    "jquery": "3.2.1",
+    "material-ui": "0.19.0",
     "prop-types": "15.5.10",
-    "react": "15.5.4",
-    "react-color": "2.12.0",
-    "react-dom": "15.5.4",
+    "react": "15.6.1",
+    "react-color": "2.13.4",
+    "react-dom": "15.6.1",
     "react-draggable": "2.2.6",
-    "react-tap-event-plugin": "2.0.1"
+    "react-router-dom": "4.1.2",
+    "react-scripts": "1.0.11"
   },
   "devDependencies": {
-    "node-sass-chokidar": "0.0.2",
-    "npm-run-all": "4.0.2",
-    "react-scripts": "1.0.7"
+    "husky": "0.14.3",
+    "node-sass-chokidar": "0.0.3",
+    "npm-run-all": "4.0.2"
   },
   "scripts": {
     "build-css": "node-sass-chokidar src/ -o src/",
     "watch-css": "npm run build-css && node-sass-chokidar src/ -o src/ --watch --recursive",
     "start-js": "react-scripts start",
     "start": "npm-run-all -p watch-css start-js",
-    "build": "npm run build-css && react-scripts build",
-    "production-build": "PUBLIC_URL='/ChronoDotsWeb' npm-run-all -s build zip-build",
+    "build": "CI=true npm run build-css && react-scripts build",
+    "production-build": "PUBLIC_URL='/ChronoDotsWeb' npm run build",
     "zip-build": "./zipBuildFolder.sh",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "production-test": "CI=true npm test",
+    "eject": "react-scripts eject",
+    "prepush": "npm run production-test"
   }
 }

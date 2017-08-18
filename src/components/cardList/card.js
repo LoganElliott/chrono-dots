@@ -50,10 +50,10 @@ const renderCardMenu = (card, openColourPickerDialog, openRenameDialog, onUpdate
             anchorOrigin={{horizontal: 'left', vertical: 'top'}}
             targetOrigin={{horizontal: 'left', vertical: 'top'}}
         >
-            <MenuItem primaryText="Rename Card" onTouchTap={() => openRenameDialog(card, onUpdate)}/>
-            <MenuItem primaryText="Set Card Colour" onTouchTap={() => openColourPickerDialog(card)}/>
-            <MenuItem primaryText="Clear Dots" onTouchTap={() => onDeleteDots(card.id, onUpdate)}/>
-            <MenuItem primaryText="Delete Card" onTouchTap={() => onDeleteCard(card.id, onUpdate)}/>
+            <MenuItem primaryText="Rename Card" onClick={() => openRenameDialog(card, onUpdate)}/>
+            <MenuItem primaryText="Set Card Colour" onClick={() => openColourPickerDialog(card)}/>
+            <MenuItem primaryText="Clear Dots" onClick={() => onDeleteDots(card.id, onUpdate)}/>
+            <MenuItem primaryText="Delete Card" onClick={() => onDeleteCard(card.id, onUpdate)}/>
         </IconMenu>
     );
 };
@@ -96,12 +96,12 @@ const renderCardHeader = (card, timeColours, openColourPickerDialog, openRenameD
         <div style={styles.cardHeader}>
             <span style={styles.cardTitle}>{card.title}</span>
             <span style={styles.buttons}>
-                    <FloatingActionButton style={styles.button} onTouchTap={() => onAddDot(card.id, halfDayValue, onUpdate)} backgroundColor={timeColours.halfDay} mini={true}>
+                    <FloatingActionButton style={styles.button} onClick={() => onAddDot(card.id, halfDayValue, onUpdate)} backgroundColor={timeColours.halfDay} mini={true}>
                         <span style={{color: halfDayTextColour}}>
                             ½
                         </span>
                     </FloatingActionButton>
-                    <FloatingActionButton style={styles.button} onTouchTap={() => onAddDot(card.id, fullDayValue, onUpdate)} backgroundColor={timeColours.fullDay} mini={true}>
+                    <FloatingActionButton style={styles.button} onClick={() => onAddDot(card.id, fullDayValue, onUpdate)} backgroundColor={timeColours.fullDay} mini={true}>
                         <span style={{color: fullDayTextColour}}>
                             1
                         </span>
