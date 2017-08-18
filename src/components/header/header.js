@@ -68,26 +68,26 @@ class header extends React.Component {
                     open={this.state.isDrawerOpen}
                     onRequestChange={(isDrawerOpen) => this.setState({isDrawerOpen})}
                 >
-                    <MenuItem onTouchTap={() => {
+                    <MenuItem onClick={() => {
                         this.handleToggle();
                     }}>
                         <Link to='/' style={{ textDecoration: 'none', display: 'flex', color: 'black' }}>Home</Link>
                     </MenuItem>
-                    <MenuItem onTouchTap={() => {
+                    <MenuItem onClick={() => {
                         this.handleToggle();
                     }}>
                         <Link to='/time' style={{ textDecoration: 'none', display: 'flex', color: 'black' }}>Time</Link>
                     </MenuItem>
-                    <MenuItem onTouchTap={() => {
+                    <MenuItem onClick={() => {
                         this.handleToggle();
                     }}>
                         <Link to='/statistics' style={{ textDecoration: 'none', display: 'flex', color: 'black' }}>Statistics</Link>
                     </MenuItem>
                     <br />
-                    <MenuItem onTouchTap={() => {this.handleClose(); this.handleToggleIsColourDialogOpen('fullDay')}} style={styles.fullDayStyle}>
+                    <MenuItem onClick={() => {this.handleClose(); this.handleToggleIsColourDialogOpen('fullDay')}} style={styles.fullDayStyle}>
                         Full Day Colour
                     </MenuItem>
-                    <MenuItem onTouchTap={() => {this.handleClose(); this.handleToggleIsColourDialogOpen('halfDay')}} style={styles.halfDayStyle}>
+                    <MenuItem onClick={() => {this.handleClose(); this.handleToggleIsColourDialogOpen('halfDay')}} style={styles.halfDayStyle}>
                         Half Day Colour
                     </MenuItem>
                 </Drawer>
