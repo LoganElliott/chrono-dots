@@ -39,7 +39,7 @@ class StatsTable extends React.Component {
     }
 
     async getCards(){
-        const cards = await GetCards();
+        const cards = await GetCards(this.props.match.params.teamId);
         this.setState({cards});
     }
 

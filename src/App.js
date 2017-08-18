@@ -63,7 +63,7 @@ class App extends Component {
                     fullDayDotColour: timeColours.fullDay,
                 })
             };
-            const myRequest = new Request('http://vdt107/ChronoDotsWeb/api/intouch/settings', myInit);
+            const myRequest = new Request(`${baseApiUri}/intouch/settings`, myInit);
             await fetch(myRequest);
 
             this.setState({timeColours});
@@ -90,9 +90,9 @@ class App extends Component {
                     updateTimeColours={this.updateTimeColours}
                 />
                 <Switch>
-                    <Route exact path='/' render={() => <Home/>}/>
-                    <Route exact path='/time' render={() => <CardList timeColours={this.state.timeColours}/>}/>
-                    <Route exact path='/statistics' render={() => <div><StatsTable /></div>}/>
+                    <Route exact path='/:teamId/home' render={(props) => <Home { ...props }/>}/>
+                    <Route exact path='/:teamId/time' render={(props) => <CardList { ...props } timeColours={this.state.timeColours}/>}/>
+                    <Route exact path='/:teamId/statistics' render={(props) => <div><StatsTable { ...props }/></div>}/>
                 </Switch>
             </div>
         );
