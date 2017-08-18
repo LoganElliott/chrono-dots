@@ -32,13 +32,13 @@ class ColourDialog extends React.Component {
             <FlatButton
                 label="Cancel"
                 primary={true}
-                onTouchTap={this.props.onCancel}
+                onClick={this.props.onCancel}
             />,
             <FlatButton
                 label="Submit"
                 primary={true}
                 keyboardFocused={true}
-                onTouchTap={() => this.props.onSubmit(this.state.colour)}
+                onClick={() => this.props.onSubmit(this.state.colour)}
             />,
         ];
 
