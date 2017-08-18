@@ -9,16 +9,25 @@ import CardList from './components/cardList/cardList'
 import { baseApiUri } from './constants';
 import StatsTable from './components/stats/StatsTable';
 import Home from './components/home/home';
+import { teamIdRegex } from './constants';
 
 class App extends Component {
     constructor(props){
         super(props);
+
+        const match = window.location.href.match(teamIdRegex);
+        let teamId;
+        if (match) {
+            teamId = match[1];
+        }
+
         this.state = {
             timeColours: {
                 fullDay: '#555555',
                 halfDay: '#D9E3F0',
             }, 
             description: 'Team Awesome',
+            teamId,
         };
         this.updateTimeColours = this.updateTimeColours.bind(this);
     }
@@ -32,7 +41,7 @@ class App extends Component {
                 method: 'GET',
                 headers: myHeaders
             };
-            const myRequest = new Request(`${baseApiUri}/intouch/settings`, myInit);
+            const myRequest = new Request(`${baseApiUri}/${this.state.teamId}/settings`, myInit);
             let response = await fetch(myRequest);
             data = await response.json();
             this.setState({timeColours: {
@@ -63,7 +72,7 @@ class App extends Component {
                     fullDayDotColour: timeColours.fullDay,
                 })
             };
-            const myRequest = new Request(`${baseApiUri}/intouch/settings`, myInit);
+            const myRequest = new Request(`${baseApiUri}/${this.state.teamId}/settings`, myInit);
             await fetch(myRequest);
 
             this.setState({timeColours});
@@ -75,11 +84,15 @@ class App extends Component {
     }
 
     updateTimeColours(timeColours){
-        this.updateSettings(timeColours, this.state.description);
+        if(this.state.teamId){
+            this.updateSettings(timeColours, this.state.description);
+        }
     }
 
     componentWillMount(){
-        this.getSettings();
+        if(this.state.teamId) {
+            this.getSettings();
+        }
     }
 
     render() {

@@ -5,6 +5,7 @@ import AppBar from 'material-ui/AppBar';
 import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
 import ColourDialog from '../colourDialog/colourDialog';
+import { teamIdRegex } from '../../constants';
 
 const propTypes = {
     timeColours: PropTypes.shape({
@@ -18,7 +19,7 @@ class header extends React.Component {
     constructor(props) {
         super(props);
 
-        const match = window.location.href.match(/#\/(.+)\/(home|statistics|time)/);
+        const match = window.location.href.match(teamIdRegex);
         let teamId;
         if (match) {
             teamId = match[1];
@@ -81,16 +82,31 @@ class header extends React.Component {
         }
     }
 
-    render() {
-        const styles = {
-            fullDayStyle: {
-                backgroundColor: this.props.timeColours.fullDay,
-            },
-            halfDayStyle: {
-                backgroundColor: this.props.timeColours.halfDay,
-            }
-        };
+    renderTimeDotColours() {
+        if(this.state.teamId) {
+            const styles = {
+                fullDayStyle: {
+                    backgroundColor: this.props.timeColours.fullDay,
+                },
+                halfDayStyle: {
+                    backgroundColor: this.props.timeColours.halfDay,
+                }
+            };
 
+            return (
+                <div>
+                    <MenuItem onClick={() => {this.handleClose(); this.handleToggleIsColourDialogOpen('fullDay')}} style={styles.fullDayStyle}>
+                        Full Day Colour
+                    </MenuItem>
+                    <MenuItem onClick={() => {this.handleClose(); this.handleToggleIsColourDialogOpen('halfDay')}} style={styles.halfDayStyle}>
+                        Half Day Colour
+                    </MenuItem>
+                </div>
+            )
+        }
+    }
+
+    render() {
         return (
             <div>
                 <AppBar
@@ -105,12 +121,7 @@ class header extends React.Component {
                     onRequestChange={(isDrawerOpen) => this.setState({isDrawerOpen})}
                 >
                     {this.renderRouteLinks()}
-                    <MenuItem onClick={() => {this.handleClose(); this.handleToggleIsColourDialogOpen('fullDay')}} style={styles.fullDayStyle}>
-                        Full Day Colour
-                    </MenuItem>
-                    <MenuItem onClick={() => {this.handleClose(); this.handleToggleIsColourDialogOpen('halfDay')}} style={styles.halfDayStyle}>
-                        Half Day Colour
-                    </MenuItem>
+                    {this.renderTimeDotColours()}
                 </Drawer>
                 <ColourDialog title={this.state.colourPickerTitle} isOpen={this.state.isColourDialogOpen} onCancel={this.handleToggleIsColourDialogOpen} onSubmit={this.handleSetColour}/>
             </div>
