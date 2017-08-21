@@ -121,10 +121,6 @@ class CardList extends Component {
     }
 
     render() {
-        if(!this.state.cards || this.state.cards.length === 0){
-            return null;
-        }
-
         const styles = {
             gridTile: {
                 display: 'flex',
