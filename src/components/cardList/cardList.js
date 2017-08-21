@@ -65,8 +65,8 @@ class CardList extends Component {
         this.getCards();
     };
 
-    async addCard (cardTitle) {
-        await AddCard(cardTitle);
+    async addCard (cardTitle, teamId) {
+        await AddCard(cardTitle, teamId);
         this.setState({newCardTitle: ''});
         this.getCards();
     }
@@ -82,7 +82,7 @@ class CardList extends Component {
         return (
             <div style={styles.container}>
                 <TextField hintText={'New Card Title'} value={this.state.newCardTitle} onChange={(event, newCardTitle) => this.setState({ newCardTitle})}/>
-                <FloatingActionButton mini={true} onClick={() => this.addCard(this.state.newCardTitle)}>
+                <FloatingActionButton mini={true} onClick={() => this.addCard(this.state.newCardTitle, this.props.match.params.teamId)}>
                     <ContentAdd />
                 </FloatingActionButton>
             </div>
