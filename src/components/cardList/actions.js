@@ -13,7 +13,12 @@ export const GetCards = async (teamId) => {
         const myRequest = new Request(`${baseApiUri}/${teamId}/dashboard`, myInit);
         let response = await fetch(myRequest);
         data = await response.json();
-        return data;
+        if (response.ok) {
+            return data;
+        }
+        console.log('Unable to get cards,', data.message);
+        return [];
+
     } catch(e) {
         console.log('Unable to get cards', e)
     }
